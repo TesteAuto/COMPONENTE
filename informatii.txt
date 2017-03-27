@@ -1,0 +1,6 @@
+http://localhost/COMPONENTE/BackEnd/fisiere/test.php
+
+npm install
+C:\MAMP\htdocs\COMPONENTE\FrontEnd
+npm run mapa
+http://localhost/COMPONENTE/FrontEnd/mapa/index.html

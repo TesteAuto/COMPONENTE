@@ -1,0 +1,22 @@
+ body{
+	font-family: Georgia, serif;
+ }
+ /*FORMULAR CREARE CONT NOU!*/
+ legend{
+  border-style:none;
+}
+.textLegenda{
+  text-align: center;
+  padding-top:10px;
+  font-size:35px;
+}
+.aliniereBtn{
+    text-align: center;
+}
+.marimeBtn{
+   width: 150px;
+}
+.eroare{
+    color:#ff4d4d;
+}
+ /*SFARSIT FORMULAR CREARE CONT NOU!*/

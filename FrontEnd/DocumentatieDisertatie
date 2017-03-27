@@ -1,0 +1,139 @@
+index.html
+1) form "Creare cont nou!"
+2) validare campuri Front-End
+      input -> Validare campuri (index.html)
+   	
+  		"Câmpuri obligatorii de completat":
+      Câmp Utilizator
+      <input  name="utilizator" placeholder="Nume utilizator" class="form-control" ng-model="utilizator" type="text" required>
+      <!-- Validare camp utilizator -->
+            <div ng-messages="contNouForm.utilizator.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul utilizator</div>
+            </div>
+      Câmp Parola
+      "Câmpuri obligatorii de completat" 
+      "Numar limitat la 10 caractere"
+      <input  name="parola" placeholder="Parola poate să conţină maxim 10 caractere" class="form-control" ng-model="parola" type="password" ng-trim="false" maxlength="10" required>
+      <!-- Validare camp parola -->
+            <div ng-messages="contNouForm.parola.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul parola</div>
+            </div>
+      Câmp E-mail
+      a)
+  		<input name="email" placeholder="Adresa ta de e-mail" class="form-control" ng-model="email" type="text" required>
+  		 <!-- Validare camp email -->
+       <div ng-messages="contNouForm.email.$error">
+          <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul e-mail</div>
+        </div>
+      b)
+      // Validare camp E-mail (controllerPrincipal.js)
+      $scope.validareEmail = function(valoare){
+        let sablon=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+          if(sablon.test(valoare)){         
+            return true;  
+            }else{   
+          return false;
+        }
+      };
+      if($scope.validareEmail($scope.email)){
+         //Adresa de e-mail este valida;
+         ...
+      }else{
+         //Adresa de e-mail nu este valida;
+      }
+     
+  	c)  Buton Anulează
+
+  		Stergere text din campurile completate de utilizator (revenire la starea initiala)
+  		(index.html)
+  		<button type="submit" class="btn btn-danger marimeBtn" ng-click = "cancel()">Anulează <span class="glyphicon glyphicon-erase"></span></button>
+  		(controllerPrincipal.js)
+  		// Btn Anulează
+    	 $scope.cancel = function(){
+          $scope.utilizator = '';
+          $scope.parola = '';
+          $scope.email = '';
+      };
+
+		d)  Buton Crează cont
+
+    	(index.html)
+    	Cu ng-disabled="contNouForm.$invalid" butonul "Crează cont" ramane inactiv atata timp cat campurile nu sunt completate de catre utilizator
+    	<button type="submit" class="btn btn-warning marimeBtn" ng-disabled="contNouForm.$invalid" ng-click = "creareContNou()">Crează cont <span class="glyphicon glyphicon-send"></span></button>
+
+
+      Functionalitate buton Crează cont (controllerPrincipal.js)
+      - este validat campul e-mail
+      - datele introduse de utilizator sunt salvate in obiectul parametri
+      - simultan cu datele introduse de utilizator vor fi salvate si cod imagine folosind base64 encode(imagine utilizator default) si atributul "status" = utilizator
+      - campurile revin la starea initiala
+
+        $scope.creareContNou = function(){
+      if($scope.validareEmail($scope.email)){
+         console.log("Adresa de e-mail este valida");
+         let poza = 'cod imagine';
+         let parametri = {
+          utilizator: $scope.utilizator,
+          parola: $scope.parola,
+          email: $scope.email,
+          poza: poza,
+          status: 'utilizator'
+         };
+         $scope.serv = serviceCreareContNou.postData(parametri).then(function(response) {
+          if(response.data){
+            if(response.data instanceof Array){
+                    console.log(response.data[0]);
+                    sweetAlert("Atenţie!", response.data[0], "error");
+            }else{
+              console.log(response.data);
+              // $scope.poza = response.data.poza;
+              swal("Contul a fost creat cu succes!", "", "success");
+                $scope.cancel();
+            }
+                  }
+         }, function () {
+          console.log("Eroare in controller!!!");
+          $scope.cancel();
+         });
+      }else{
+         sweetAlert("Atenţie!", "Vă rugăm să introduceţi o adresă de e-mail validă!", "error");
+      }
+    };
+NB: (package.json)
+1.
+  https://www.npmjs.com/package/angular-messages
+
+  npm i angular-messages --save
+  
+  export default angular.module('modulParticular', ['ngMessages']) (introModulParticular.js)
+  <!-- Angular-messages -->
+  <script src="../node_modules/angular-messages/angular-messages.js"></script> (index.html)  
+2.
+  https://www.npmjs.com/package/sweetalert
+  http://t4t5.github.io/sweetalert/
+
+  npm install sweetalert --save
+
+  <!-- SweetAlert -->
+  <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- SweetAlert CSS-->
+  <link href="../node_modules/sweetalert/dist/sweetalert.css" rel="stylesheet">
+
+  3)  BackEnd
+-cautare utilizator in baza de date dupa nume si verificare utilizator existent sau nu
+-criptare parola introdusa de catre utilizator
+
+$utilizator = R::findOne('crearecontnou',' utilizator = ? ',array($params['utilizator']));
+      if(is_object($utilizator)!='false'){
+        foreach ($params as $key => $value){
+             // criptare parola
+             if($key == 'parola'){
+                      $bean["parola"] = hash("sha256", $value);
+             }else{
+                      $bean[$key] = $value;
+              }
+        }
+        return R::exportAll(R::load($this->tabel, R::store($bean)));
+      }else{
+          return 'Nume utilizator deja existent';
+      }

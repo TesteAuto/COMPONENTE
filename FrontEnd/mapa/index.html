@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+	<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Teste Auto</title>
+  <!-- Bootstrap CSS -->
+	<link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <link href="../fisiere/aplicatie/module/style/index.css" rel="stylesheet">
+  <!-- SweetAlert CSS-->
+  <link href="../node_modules/sweetalert/dist/sweetalert.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="">
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body ng-controller = "controllerPrincipal">
+  <!-- FORMULAR CREARE CONT NOU! -->
+  <div class="container">
+    <form class="form-horizontal" name="contNouForm" novalidate>
+      <fieldset>
+        <legend class="textLegenda">Creare cont nou!</legend>
+        <!-- Text input Utilizator-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Utilizator</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
+              <input  name="utilizator" placeholder="Nume utilizator" class="form-control" ng-model="utilizator" type="text" required>
+            </div>
+            <!-- Validare camp utilizator -->
+            <div ng-messages="contNouForm.utilizator.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul utilizator</div>
+            </div>
+          </div>
+        </div>
+        <!-- Text input Parola-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Parola</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-share-alt"></i></span>
+              <input  name="parola" placeholder="Parola poate să conţină maxim 10 caractere" class="form-control" ng-model="parola" type="password" ng-trim="false" maxlength="10" required>
+            </div>
+            <!-- Validare camp parola -->
+            <div ng-messages="contNouForm.parola.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul parola</div>
+            </div>
+          </div>
+        </div>
+        <!-- Text input E-mail-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">E-mail</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+              <input name="email" placeholder="Adresa e-mail" class="form-control" ng-model="email" type="text" required>
+            </div>
+            <!-- Validare camp email -->
+            <div ng-messages="contNouForm.email.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul e-mail</div>
+            </div>
+          </div>
+        </div>
+        <!-- Button -->
+        <div class="form-group">
+          <label class="col-md-4 control-label"></label>
+          <div class="col-md-4">
+            <div class="aliniereBtn">
+              <button type="submit" class="btn btn-warning marimeBtn" ng-disabled="contNouForm.$invalid" ng-click = "creareContNou()">Crează cont <span class="glyphicon glyphicon-send"></span></button>
+              <button type="submit" class="btn btn-danger marimeBtn" ng-click = "cancel()">Anulează <span class="glyphicon glyphicon-erase"></span></button>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+    <!-- <img ng-src="data:image/png;base64,{{poza}}"> -->
+  </div>
+  <!-- SFARSIT FORMULAR CREARE CONT NOU! -->
+  <!-- Angular -->
+  <script src="../node_modules/angular/angular.js"></script>
+  <!-- jQuery -->
+  <script src="../node_modules/jquery/dist/jquery.js"></script>
+  <!-- Bootstrap JS-->
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <!-- Angular-messages -->
+  <script src="../node_modules/angular-messages/angular-messages.js"></script>
+  <!-- SweetAlert -->
+  <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- Fisiere concatenate -->
+  <script src="continut.js"></script>
+</body>
+</html>

@@ -1,0 +1,5 @@
+{
+    "require": {
+        "slim/slim": "^2.0",
+		"firebase/php-jwt": "^3.0"   }
+}

@@ -1,0 +1,119 @@
+index.html
+1) form "Autentificare cont!"
+2) validare campuri Front-End
+      input -> Validare campuri (index.html)
+   	
+  		"Câmpuri obligatorii de completat":
+      Câmp Utilizator
+      <input  name="utilizator" placeholder="Nume utilizator" class="form-control" ng-model="utilizator" type="text" required>
+      <!-- Validare camp utilizator -->
+            <div ng-messages="contNouForm.utilizator.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul utilizator</div>
+            </div>
+      Câmp Parola
+      "Câmpuri obligatorii de completat" 
+      "Numar limitat la 10 caractere"
+      <input  name="parola" placeholder="Parola poate să conţină maxim 10 caractere" class="form-control" ng-model="parola" type="password" ng-trim="false" maxlength="10" required>
+      <!-- Validare camp parola -->
+            <div ng-messages="contNouForm.parola.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul parola</div>
+            </div>
+     
+  	c)  Buton Anulează
+
+  		Stergere text din campurile completate de utilizator (revenire la starea initiala)
+  		(index.html)
+  		<button type="submit" class="btn btn-danger marimeBtn" ng-click = "cancel()">Anulează <span class="glyphicon glyphicon-erase"></span></button>
+  		(controllerPrincipal.js)
+  		// Btn Anulează
+    	 $scope.cancel = function(){
+          $scope.utilizator = '';
+          $scope.parola = '';
+          $scope.email = '';
+      };
+
+		d)  Buton Autentificare cont
+
+    	(index.html)
+    	Cu ng-disabled="Autentificare.$invalid" butonul "Buton Autentificare cont" ramane inactiv atata timp cat campurile nu sunt completate de catre utilizator
+    	 <button type="submit" class="btn btn-warning marimeBtn" ng-disabled="Autentificare.$invalid" ng-click = "autentificare()">Autentificare cont <span class="glyphicon glyphicon-send"></span></button>
+
+
+      Functionalitate buton Autentificare cont (controllerPrincipal.js)
+      $scope.autentificare = function(){
+         let parametri = {
+          utilizator: $scope.utilizator,
+          parola: $scope.parola
+         };
+         $scope.serv = serviceAutentificare.postData(parametri).then(function(response) {
+            if(response.data[0]!=='Introduceţi credenţiale valide'){
+              swal("Autentificare reuşită!", "", "success");
+              let jwtDecode = jwt_decode(response.data[0]);
+                    console.log(jwtDecode.credentials.utilizator);
+                    $scope.cancel();
+            }else{
+              console.log(response.data[0]);
+              sweetAlert("Atenţie!", response.data[0], "error");
+                $scope.cancel();
+            }
+         }, function () {
+          console.log("Eroare in controller!!!");
+          $scope.cancel();
+         });
+    };
+    
+NB: (package.json)
+1.
+  https://www.npmjs.com/package/angular-messages
+
+  npm i angular-messages --save
+  
+  export default angular.module('modulParticular', ['ngMessages']) (introModulParticular.js)
+  <!-- Angular-messages -->
+  <script src="../node_modules/angular-messages/angular-messages.js"></script> (index.html)  
+2.
+  https://www.npmjs.com/package/sweetalert
+  http://t4t5.github.io/sweetalert/
+
+  npm install sweetalert --save
+
+  <!-- SweetAlert -->
+  <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- SweetAlert CSS-->
+  <link href="../node_modules/sweetalert/dist/sweetalert.css" rel="stylesheet">
+3.
+  npm install jwt-decode --save
+  https://www.npmjs.com/package/jwt-decode
+
+  <!-- JWT DECODE -->
+  <script src="../node_modules/jwt-decode/build/jwt-decode.js"></script>
+
+  3)  BackEnd
+-cautare utilizator in baza de date dupa nume si verificare utilizator existent sau nu
+-criptare date returnate folosind obiectul JWT
+
+  $key = "key";
+      if(!$row->eroare) {
+              $issuedAt = time();
+              $notBefore = $issuedAt;
+              $expire = $notBefore + 60 * 60 * 24;
+              $serverName = 'localhost/COMPONENTE/BackEnd';
+              $payload = array(
+                  'iat'  => $issuedAt,
+                  'iss'  => $serverName,
+                  'nbf'  => $notBefore,
+                  'exp'  => $expire,
+                  'credentials' => (array)$row,
+              );
+              $jwt = JWT::encode($payload, $key, 'HS256');
+              $json = Principal::raspuns($jwt);
+              $app->response()->header('Content-Type', 'application/json');
+              echo $json;
+      }else{
+            $json = Principal::raspuns($row->eroare);
+            $app->response()->header('Content-Type', 'application/json');
+            echo $json;
+      }
+      
+  composer update 
+  "firebase/php-jwt": "^3.0" 

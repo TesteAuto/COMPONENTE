@@ -1,0 +1,178 @@
+index.html
+1) form "Trimite-ne un mesaj!"
+2) validare campuri front-end
+   a)	textarea -> Numar limitat de caractere intr-un mesaj (index.html)
+	    <!-- Numar limitat de caractere intr-un mesaj -->
+        <textarea class="form-control" name="nrCaractere" placeholder="Mesajul tău" ng-model="nrCaractere" ng-trim="false" maxlength="250" required></textarea>
+	    <span class="nrCaractere pull-right">*Caractere rămase {{250 - nrCaractere.length}}</span>
+   b)	input -> Validare campuri (index.html)
+   	
+  		"Câmpuri obligatorii de completat":
+
+      Câmp E-mail
+      a)
+  		<input name="email" placeholder="Adresa ta de e-mail" class="form-control" ng-model="email" type="text" required>
+  		 <!-- Validare camp email -->
+         <div ng-messages="trimiteMesajForm.email.$error">
+            <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul email</div>
+         </div>
+      b)
+      // Validare camp E-mail (controllerPrincipal.js)
+      $scope.validareEmail = function(valoare){
+        let sablon=/^([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+/;
+          if(sablon.test(valoare)){         
+            return true;  
+            }else{   
+          return false;
+        }
+      };
+      if($scope.validareEmail($scope.email)){
+         //Adresa de e-mail este valida;
+         ...
+      }else{
+         //Adresa de e-mail nu este valida;
+      }
+
+      Câmp Subiect
+
+  		<input  name="subiect" placeholder="Subiect mesaj" class="form-control" ng-model="subiect" type="text" required>
+  		<!-- Validare camp subiect -->
+        <div ng-messages="trimiteMesajForm.subiect.$error">
+            <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul subiect</div>
+        </div>
+
+      Câmp Mesaj
+      <textarea class="form-control" name="nrCaractere" placeholder="Mesajul tău" ng-model="nrCaractere" ng-trim="false" maxlength="250" required></textarea>
+        <!-- Validare camp mesaj -->
+        <div ng-messages="trimiteMesajForm.nrCaractere.$error">
+            <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul mesaj</div>
+        </div>
+
+  	c)  Buton Anulează
+
+  		Stergere text din campurile completate de utilizator (revenire la starea initiala)
+  		(index.html)
+  		<button type="submit" class="btn btn-danger marimeBtn" ng-click = "cancel()">Anulează <span class="glyphicon glyphicon-erase"></span></button>
+  		(controllerPrincipal.js)
+  		// Btn Anulează
+  		$scope.cancel = function(){
+  			$scope.email = '';
+  			$scope.subiect = '';
+  			$scope.nrCaractere = '';
+  		};
+
+		d)  Buton Trimite
+
+    	(index.html)
+    	Cu ng-disabled="trimiteMesajForm.$invalid" butonul "Trimite" ramane inactiv atata timp cat campurile nu sunt completate de catre utilizator
+    	<button type="submit" class="btn btn-warning marimeBtn" ng-disabled="trimiteMesajForm.$invalid" ng-click = "trimiteEmail()">Trimite <span class="glyphicon glyphicon-send"></span></button>
+
+
+      Functionalitate buton Trimite (controllerPrincipal.js)
+      - este validat campul e-mail
+      - datele introduse de utilizator sunt salvate in obiectul parametri
+      - campurile revin la starea initiala
+
+      $scope.trimiteEmail = function(){
+        if($scope.validareEmail($scope.email)){
+          console.log("Adresa de e-mail este valida");
+          let parametri = {
+            email: $scope.email,
+            subiect: $scope.subiect,
+            mesaj: $scope.nrCaractere
+          };
+          $scope.serv = serviceMail.postData(parametri).then(function(response) {
+            if(response.data.eroare==='Mesajul nu a fost trimis cu succes!'){
+              console.log(response.data.eroare);
+              sweetAlert("Atenţie!", response.data.eroare, "error");
+              $scope.cancel();
+            }else{
+              swal("Mesajul tău a fost trimis cu succes!", "", "success");
+              console.log(response.data);
+              $scope.cancel();
+            }
+          }, function () {
+            console.log("Eroare in controller!!!");
+            $scope.cancel();
+          });
+        }else{
+          sweetAlert("Atenţie!", "Vă rugăm să introduceţi o adresă de e-mail validă!", "error");
+        }
+      };
+NB: (package.json)
+1.
+  https://www.npmjs.com/package/angular-messages
+
+  npm i angular-messages --save
+  
+  export default angular.module('modulParticular', ['ngMessages']) (introModulParticular.js)
+  <!-- Angular-messages -->
+  <script src="../node_modules/angular-messages/angular-messages.js"></script> (index.html)  
+2.
+  https://www.npmjs.com/package/sweetalert
+  http://t4t5.github.io/sweetalert/
+
+  npm install sweetalert --save
+
+  <!-- SweetAlert -->
+  <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- SweetAlert CSS-->
+  <link href="../node_modules/sweetalert/dist/sweetalert.css" rel="stylesheet">
+
+NB: composer.json
+
+composer update  "phpmailer/phpmailer": "^5.2" 
+
+(conectare.php)
+public static function email($email, $subiect,$mesaj){
+   try {
+    $mail = new PHPMailer;
+    $mail->CharSet = 'UTF-8';
+    $mail->isSMTP();                                   
+    $mail->Host = 'smtp.mail.ru';  
+    $mail->SMTPAuth = true;                               
+    $mail->Username = 'stela.ceban.82@mail.ru';                
+    $mail->Password = 'Aa1234!!';                         
+    $mail->SMTPSecure = 'ssl';                           
+    $mail->Port = 465;                                   
+
+    $mail->From = 'stela.ceban.82@mail.ru';
+    $mail->FromName = 'Stela';
+    $mail->addAddress($email, $email);                
+    $mail->SMTPDebug = 0;
+
+    $mail->isHTML(true);                                 
+
+    $mail->Subject = $subiect;
+    $mail->Body    = $mesaj;
+    $mail->AltBody = '';
+    if($mail->send()) {
+        return true;
+    } else {
+        return false;
+    }
+  } catch(Exception $e) {
+   echo $e->getMessage();
+ }
+}
+
+     $email = $params['email'];
+     $subiect = $params['subiect'];
+     $mesaj = $params['mesaj'];
+     $verificare = Conectare::email($email,$subiect,$mesaj);
+     if($verificare=='true'){
+         if($this->xdispense) {
+           $bean = R::xdispense($this->tabel);
+         } else {
+           $bean = R::dispense($this->tabel);
+         }
+         foreach ($params as $key => $value){
+          $bean[$key] = $value;
+        }
+        $bean->data = date("Y-m-d", time());
+        return R::exportAll(R::load($this->tabel, R::store($bean)));
+     }else{
+        $ob = new stdClass();
+        $ob->eroare = "Mesajul nu a fost trimis cu succes!";
+        return $ob;
+     }

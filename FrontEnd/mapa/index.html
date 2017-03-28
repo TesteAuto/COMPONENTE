@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+	<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Teste Auto</title>
+  <!-- Bootstrap CSS -->
+	<link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <link href="../fisiere/aplicatie/module/style/index.css" rel="stylesheet">
+  <!-- SweetAlert CSS-->
+  <link href="../node_modules/sweetalert/dist/sweetalert.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="">
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body ng-controller = "controllerPrincipal">
+  <!-- FORMULAR TRIMITE-NE UN MESAJ! -->
+  <div class="container">
+    <form class="form-horizontal" name="trimiteMesajForm" novalidate>
+      <fieldset>
+        <legend class="textLegenda">Trimite-ne un mesaj!</legend>
+        <!-- Text input E-mail-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">E-mail</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
+              <input name="email" placeholder="Adresa ta de e-mail" class="form-control" ng-model="email" type="text" required>
+            </div>
+            <!-- Validare camp email -->
+            <div ng-messages="trimiteMesajForm.email.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul e-mail</div>
+            </div>
+          </div>
+        </div>
+        <!-- Text input Subiect-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Subiect</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-share-alt"></i></span>
+              <input  name="subiect" placeholder="Subiect mesaj" class="form-control" ng-model="subiect" type="text" required>
+            </div>
+            <!-- Validare camp subiect -->
+            <div ng-messages="trimiteMesajForm.subiect.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul subiect</div>
+            </div>
+          </div>
+        </div>
+        <!-- Text area Mesaj-->
+        <div class="form-group">
+          <label class="col-md-4 control-label">Mesaj</label>
+          <div class="col-md-4 inputGroupContainer">
+            <div class="input-group">
+              <span class="input-group-addon"><i class="glyphicon glyphicon-pencil"></i></span>
+              <!-- Numar limitat de caractere intr-un mesaj -->
+              <textarea class="form-control" name="nrCaractere" placeholder="Mesajul tău" ng-model="nrCaractere" ng-trim="false" maxlength="250" required></textarea>
+            </div>
+            <!-- Validare camp mesaj -->
+            <div ng-messages="trimiteMesajForm.nrCaractere.$error">
+              <div ng-message="required" class="eroare">* Vă rugăm să completaţi câmpul mesaj</div>
+            </div>
+            <span class="nrCaractere pull-right">*Caractere rămase {{250 - nrCaractere.length}}</span>
+          </div>
+        </div>
+        <!-- Button -->
+        <div class="form-group">
+          <label class="col-md-4 control-label"></label>
+          <div class="col-md-4">
+            <div class="aliniereBtn">
+              <button type="submit" class="btn btn-warning marimeBtn" ng-disabled="trimiteMesajForm.$invalid" ng-click = "trimiteEmail()">Trimite <span class="glyphicon glyphicon-send"></span></button>
+              <button type="submit" class="btn btn-danger marimeBtn" ng-click = "cancel()">Anulează <span class="glyphicon glyphicon-erase"></span></button>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+  <!-- SFARSIT FORMULAR TRIMITE-NE UN MESAJ! -->
+  <!-- Angular -->
+  <script src="../node_modules/angular/angular.js"></script>
+  <!-- jQuery -->
+  <script src="../node_modules/jquery/dist/jquery.js"></script>
+  <!-- Bootstrap JS-->
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <!-- Angular-messages -->
+  <script src="../node_modules/angular-messages/angular-messages.js"></script>
+  <!-- SweetAlert -->
+  <script src="../node_modules/sweetalert/dist/sweetalert.min.js"></script>
+  <!-- Fisiere concatenate -->
+  <script src="continut.js"></script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+ body{
+	font-family: Georgia, serif;
+ }
+ /*FORMULAR TRIMITE-NE UN MESAJ!*/
+ legend{
+  border-style:none;
+}
+.textLegenda{
+  text-align: center;
+  padding-top:10px;
+  font-size:35px;
+}
+.nrCaractere{
+    color:#00cc00;
+}
+.aliniereBtn{
+    text-align: center;
+}
+.marimeBtn{
+   width: 150px;
+}
+.eroare{
+    color:#ff4d4d;
+}
+ /*SFARSIT FORMULAR TRIMITE-NE UN MESAJ!*/

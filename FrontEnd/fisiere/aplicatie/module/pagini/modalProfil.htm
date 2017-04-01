@@ -1,0 +1,71 @@
+<div ng-controller = "controllerProfil">
+    <div class="row">
+      <div class="col-md-6">
+        <!-- POZA -->
+        <div flow-init flow-name="uploader.flow" flow-files-added="processFiles($files)" flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]">
+          <button flow-btn type="file" class="btn btn-default"  ng-click="$flow.cancel()"><span class="glyphicon glyphicon-camera" aria-hidden="true"></span></button><span style="color:red;"> * format acceptat png, jpg, jpeg, gif</span>
+          <img ng-if="defaultImg" ng-src="data:image/png;base64,{{poza}}" alt="150x150" class="preview img-responsive img-circle"/>
+          <div ng-repeat="image in uploader.flow.files track by $index">
+            <img class="preview img-responsive img-circle" flow-img="image"/>
+          </div>
+        </div>
+        <!-- FINAL POZA -->
+      </div>
+      <div class="col-md-6">
+      <!-- CAMPURI EDITABILE -->
+      <form editable-form name="formular">
+        <div class="form-group">
+          <div class="row">
+            <div class="col-sm-6 col-md-6  text-right">
+              <label><span class="glyphicon glyphicon-user"></span> Utilizator: </label>
+            </div>
+            <div class="col-sm-6 col-md-6 text-left">
+             <div editable-text="utilizator.nume" ng-model="utilizator.nume">{{ utilizator.nume }}</div>
+           </div>
+         </div>
+        </div>
+        <div class="form-group">
+         <div class="row">
+          <div class="col-sm-6 col-md-6 text-right">
+            <label><span class="glyphicon glyphicon-screenshot"></span> Parola: </label>
+          </div>
+          <div class="col-sm-6 col-md-6 text-left">
+           <div editable-password="utilizator.parola" ng-model="utilizator.parola" style="color:white;">{{ utilizator.parola }}</div>
+          </div>
+          </div>
+        </div>
+      <div class="form-group">
+      <div class="row">
+          <div class="col-sm-6 col-md-6 text-right">
+            <label><span class="glyphicon glyphicon-envelope"></span> Email: </label>
+          </div>
+          <div class="col-sm-6 col-md-6 text-left">
+           <div editable-text="utilizator.email" ng-model="utilizator.email">{{ utilizator.email }}</div>
+         </div>
+      </div>
+     </div>
+     <div class="form-group">
+      <div class="row">
+          <div class="col-sm-6 col-md-6 text-right">
+            <button type="button" class="btn btn-default" ng-click="formular.$show()" ng-show="!formular.$visible"><span class="glyphicon glyphicon-pencil"></span>   Editează</button>
+          </div>
+          <div class="col-sm-6 col-md-6 text-left">
+           <button  type="button" class="btn btn-danger" ng-click="salveaza()" ng-show="!formular.$visible" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-saved"></span>  Salvează</button>
+         </div>
+      </div>
+     </div>
+     <div class="form-group">
+        <div class="row"> 
+          <div class="col-md-12 text-right">
+            <span ng-show="formular.$visible">
+              <button type="submit" class="btn btn-primary" ng-disabled="formular.$waiting" ng-show="formular.$visible"><span class="glyphicon glyphicon-ok"></span>  Ok </button>
+              <button type="button" class="btn btn-default" ng-disabled="formular.$waiting" ng-click="formular.$cancel()" ng-show="formular.$visible"><span class="glyphicon glyphicon-erase"></span>  Anulează </button>
+            </span>
+          </div>
+         </div>
+        </div>
+      </form>
+      <!-- FINAL CAMPURI EDITABILE -->
+      </div>
+    </div>
+</div>

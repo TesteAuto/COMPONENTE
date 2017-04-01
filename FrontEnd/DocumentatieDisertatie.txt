@@ -1,0 +1,84 @@
+NB:
+1) 
+https://www.npmjs.com/package/angular-xeditable
+npm i angular-xeditable --save
+export default angular.module('modulParticular', ['xeditable']) (introModulParticular.js)
+<!-- CAMPURI EDITABILE -->
+<link href="../node_modules/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+<script src="../node_modules/angular-xeditable/dist/js/xeditable.js"></script> (index.html)
+
+2)
+https://www.npmjs.com/package/ng-flow
+npm install ng-flow --save
+export default angular.module('modulParticular', ['flow']) (introModulParticular.js)
+<!-- PENTRU UPLOAD IMAGINE-->
+<script src="../node_modules/ng-flow/dist/ng-flow-standalone.min.js"></script>
+
+FrontEnd 
+* format acceptat png, jpg, jpeg, gif
+flow-file-added="!!{png:1,gif:1,jpg:1,jpeg:1}[$file.getExtension()]"
+<div ng-repeat="image in uploader.flow.files track by $index">
+    <img class="preview img-responsive img-circle" flow-img="image"/>
+</div>
+controller
+$scope.poza = 'iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEVzc3P////Kysrt7e2Wlpa5ubmEhISnp6fc3NwvvdnZAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABWElEQVRoge3TQWvCMBjG8YcR036MEnR6HGPsLGOuHnuQxWMQcR7LNtcdi7O6j70kriooJeJ2e35iwFD/vA0tQEREREREREREREQXS05vx/aD8szWzfGWyICWa2X7vcEFLTfZobCWEM+ysAE9M3YFZr4lXKuPtCgM0tG29aLtluw3tGI9HKYlOtNe3w8zkL3bbn1eafFmWu+DZPKlcrFJ11irvKmVi3u07Szxb8vPtTt77S66dnPFBg9YmqZ7jCFLjKIcV6daIrHXTH1r4nY3jedlWwm0/Y877KPW3EAqvXItNxrWAS0si9WpVtvfW3vXKkPmyp6wbS0OW1Hm783PNQ9toSrscdkzk5X7Xbfmvt+6c0F7njqsJR/HBpCVWgBLXbe+lTJR1R0h7uRSjbPQ1ypyT4409bIn3TKzX4NQUcNTeBbxgc8/SgGvTS8HERERERERERHR//oB7RA/2+QQGmYAAAAASUVORK5CYII=';
+// Imagine
+$scope.imageStrings = [];
+		$scope.processFiles = function(files){
+			angular.forEach(files, function(flowFile, i){
+				var fileReader = new FileReader();
+				fileReader.onload = function (event) {
+					let uri = event.target.result;
+						$scope.imageStrings[i] = uri;    
+						$scope.imgSalvata = $scope.imageStrings[i]; 
+						$scope.defaultImg = false;
+				};
+				fileReader.readAsDataURL(flowFile.file);
+		});
+};
+   <!-- CAMPURI EDITABILE -->
+      <form editable-form name="formular">
+        <div class="form-group">
+             <div editable-text="utilizator.nume" ng-model="utilizator.nume">{{ utilizator.nume }}</div>
+        </div>
+        <div class="form-group">
+           <div editable-password="utilizator.parola" ng-model="utilizator.parola" style="color:white;">{{ utilizator.parola }}<
+        </div>
+      <div class="form-group">
+           <div editable-text="utilizator.email" ng-model="utilizator.email">{{ utilizator.email }}</div>
+     </div>
+     <div class="form-group">
+            <button type="button" class="btn btn-default" ng-click="formular.$show()" ng-show="!formular.$visible"><span class="glyphicon glyphicon-pencil"></span>   Editează</button>
+           <button  type="button" class="btn btn-danger" ng-click="salveaza()" ng-show="!formular.$visible" data-dismiss="modal"><span class="glyphicon glyphicon-floppy-saved"></span>  Salvează</button>
+     </div>
+     <div class="form-group">
+              <button type="submit" class="btn btn-primary" ng-disabled="formular.$waiting" ng-show="formular.$visible"><span class="glyphicon glyphicon-ok"></span>  Ok </button>
+              <button type="button" class="btn btn-default" ng-disabled="formular.$waiting" ng-click="formular.$cancel()" ng-show="formular.$visible"><span class="glyphicon glyphicon-erase"></span>  Anulează </button>
+        </div>
+      </form>
+<!-- FINAL CAMPURI EDITABILE -->
+controller
+	$scope.salveaza=function(){
+		let params = {
+			utilizator: $scope.utilizator.nume,
+			parola: $scope.utilizator.parola,
+			email: $scope.utilizator.email,
+			poza: $scope.imgSalvata
+		};
+		profilService.resursa.id = 1;
+		$scope.serv = profilService.putData(params).then(function(response) {
+			console.log(response);	
+		}, function () {
+			console.log("Eroare in controller");
+		});
+		};
+BackEnd
+criptare parola
+   foreach ($param as $key => $value) {
+            // criptare parola
+             if($key == 'parola'){
+                      $bean["parola"] = hash("sha256", $value);
+             }else{
+                      $bean[$key] = $value;
+              }
+        }

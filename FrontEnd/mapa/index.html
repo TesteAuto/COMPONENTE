@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+	<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Teste Auto</title>
+  <!-- Bootstrap CSS -->
+	<link href="../node_modules/bootstrap/dist/css/bootstrap.css" rel="stylesheet">
+  <link href="../node_modules/angular-xeditable/dist/css/xeditable.css" rel="stylesheet">
+  <link href="../fisiere/aplicatie/module/style/index.css" rel="stylesheet">
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+  <link rel="icon" type="image/png" href="">
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+</head>
+<body ng-controller = "controllerPrincipal">
+  <!-- COMPONENTA MODAL -->
+  <!-- Button trigger modal -->
+  <a  data-toggle="modal" data-target="#profilModal" class="hidden-xs">Profilul Meu</a>
+  <!-- Modal -->
+  <div class="modal fade" id="profilModal" tabindex="-1" role="dialog" aria-labelledby="profilModalLabel" aria-hidden="true">
+    <div class="modal-dialog custom-class">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+          <h4 class="modal-title" id="profilModalLabel">Profilul Meu</h4>
+        </div>
+        <div class="modal-body"><div ng-include="'../fisiere/aplicatie/module/pagini/modalProfil.htm'"></div></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Închide</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->
+  <!-- FINAL COMPONENTA MODAL -->
+  <!-- Angular -->
+  <script src="../node_modules/angular/angular.js"></script>
+  <!-- jQuery -->
+  <script src="../node_modules/jquery/dist/jquery.js"></script>
+  <!-- Bootstrap JS-->
+  <script src="../node_modules/bootstrap/dist/js/bootstrap.js"></script>
+  <!-- CAMPURI EDITABILE -->
+  <script src="../node_modules/angular-xeditable/dist/js/xeditable.js"></script>
+  <!-- PENTRU UPLOAD IMAGINE-->
+  <script src="../node_modules/ng-flow/dist/ng-flow-standalone.min.js"></script>
+  <!-- Fisiere concatenate -->
+  <script src="continut.js"></script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+.preview{
+  width: 150px;
+  height: auto;
+  margin: auto;
+  margin-bottom: 20px;
+}
+@media screen and (max-width: 991px) {
+    .custom-class {
+    	width: 50%;
+    	left: 5%;
+    	margin-left:auto;
+    	margin-right:auto; 
+    }
+}
